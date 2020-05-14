@@ -1,0 +1,201 @@
+<html>
+ <style>
+    div {
+     height: 25px;
+     width: 50%;
+ background-color:white;
+    }
+ </style>
+<h1>Welcome to Pong! </h1>
+<h3>By: Idan Goldstein</h3>
+<button type="button", id="btn1">Play Versus Computer</button>
+<button type="button", id="btn2">Play Versus Player</button>
+<div> 
+
+
+</div>
+<canvas id= "gameCanvas" width="800" height="600"> </canvas> 
+
+    
+    <script src="checkIfTouched.js" type="text/javascript"></script> 
+    <script src="colorRect.js" type="text/javascript"></script> 
+    <script src="computerMovement.js" type="text/javascript"></script> 
+    <script src="draw2Balls.js" type="text/javascript"></script> 
+    <script src="drawEverything.js" type="text/javascript"></script> 
+    <script src="drawEverythingPlayer.js" type="text/javascript"></script> 
+    <script src="drawMidLines.js" type="text/javascript"></script> 
+    <script src="drawMovement.js" type="text/javascript"></script> 
+    <script src="initiatePowerUp.js" type="text/javascript"></script> 
+    <script src="powerUp.js" type="text/javascript"></script> 
+    <script src="playerMovement.js" type="text/javascript"></script> 
+    <script src="resetBall.js" type="text/javascript"></script> 
+    <script src="runGameAI.js" type="text/javascript"></script> 
+    <script src="runGamePlayer.js" type="text/javascript"></script> 
+
+
+    <script> 
+        
+        let canvas;
+        let canvasContext;
+        let ballX=50;
+        let ballY= 100;
+        let ballSpeedX= 4;
+        let ballSpeedY= 4;
+        let paddle1Y=250;
+        let paddle2Y=250;
+        const paddleHeightLoc= 120;
+        const paddleThicc= 10;
+        let p1Score=0;
+        let p2Score=0;
+        let maxScore=10;
+        let finishedGame=false;
+        let scoredPoint=false;
+        let name= "";
+        let pUpLocX=0;
+        let pUpLocY=0;
+        let pUpAppear= false;
+        let randTimes= 0;
+        let collision= false;
+        let pUpRadius =30 
+        let randPower=0; 
+        let ballColor= "red";
+        let paddleColor= "white";
+        let compSpeed= 5;
+        let timeToWait=0;
+        let touchLast= 0;
+        let timeToWaitComp=0;
+        let keepGoing= false;
+        let ranOnce=0;
+        var upPressed = false;
+        var downPressed = false;
+
+
+
+        function keyDownHandler(event) {
+            if(event.keyCode == 40) {
+                downPressed = true;
+            }
+            else if(event.keyCode == 38) {
+                upPressed = true;
+            }
+        }
+
+
+        function keyUpHandler(event) {
+            if(event.keyCode == 40) {
+                downPressed = false;
+            }
+            else if(event.keyCode == 38) {
+                upPressed = false;
+            }
+        }
+
+
+
+        function getMousePosition(evt){
+            var rect=canvas.getBoundingClientRect();
+            var root= document.documentElement;
+            var mouseX= evt.clientX- rect.left- root.scrollLeft;
+            var mouseY= evt.clientY- rect.top- root.scrollTop;
+            return{
+                x:mouseX,
+                y:mouseY
+            };
+        }
+        
+
+        function handleMouseClick(evt){
+            if(finishedGame){
+                 p1Score=0;
+                 p2Score=0;
+                 pUpAppear=false;
+                 randTimes=0;
+                 finishedGame=false;
+            }
+        }
+
+
+        console.log("hi");
+        window.onload= function(){ //wait for page to load
+            //MAIN 
+            
+            canvas= document.getElementById("gameCanvas");
+            canvasContext= canvas.getContext("2d");
+            
+            canvas.addEventListener("mousemove", function (evt) {
+                var mousePos = getMousePosition(evt);
+                if(timeToWait==0){
+                    paddle1Y= mousePos.y-paddleHeightLoc/2;
+                }
+                else{
+                    paddle1Y=paddle1Y; 
+                }
+            });
+
+            
+            
+            document.getElementById("btn1").addEventListener("click", printerComp);
+
+                function printerComp(){
+                    if(ranOnce==0){
+                        canvasContext.font = "30px Arial";
+                        canvasContext.fillStyle= "black";
+                        canvasContext.fillText("PLAYER VS COMPUTER", 220, 300);
+                        ranOnce++
+                        setTimeout(function(){
+                            runMyGameAI();
+                        },3000);
+                    }
+                    
+                    
+                }
+
+                document.getElementById("btn2").addEventListener("click", printerPerson);
+
+                function printerPerson(){
+                    if(ranOnce==0){
+                        canvasContext.font = "30px Arial";
+                        canvasContext.fillStyle= "black";
+                        canvasContext.fillText("PLAYER VS PLAYER", 220, 300);
+                        ranOnce++;
+                        setTimeout(function(){
+                            runMyGamePlayer();
+                        },3000);
+                    }
+                   
+                    
+                }
+
+
+            document.addEventListener('keydown', keyDownHandler, false);
+            document.addEventListener('keyup', keyUpHandler, false);
+            
+            canvas.addEventListener("mousedown", handleMouseClick);
+        }
+    
+       
+
+
+
+        
+
+       
+
+
+
+       
+
+
+
+
+
+        
+
+
+
+
+    
+    </script>
+
+
+</html>
